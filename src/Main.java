@@ -1,129 +1,121 @@
 import java.util.Scanner;
 
 public class Main {
-    public static void main (String[] args){
+    final static Scanner scanner = new Scanner(System.in);
+    protected static boolean isRunning = true;
 
-        System.out.println("Welcome To Calculator App.");
-        calculator();
+    public static void main(String[] args) {
+        calcApp();
     }
 
-    public static void calculator(){
-        Scanner scanner = new Scanner(System.in);
-        double num1;
-        double num2;
+    protected static void calcApp() {
+        System.out.println("Welcome To Calculator App.");
+        while (isRunning) {
+            double num1;
+            double num2;
+            double result = 0;
+            String operator;
+
+            System.out.printf("Result: %.1f\n", result);
+
+            System.out.print("Enter The First Number:");
+
+            num1 = scanner.nextDouble();
+
+            System.out.println("Select Operation:");
+            System.out.println("( + ) , ( - ) , ( * ) , ( / ) , ( ^ )");
+            System.out.println("( c = clear ) , ( e = exit ) ");
+
+            operator = scanner.nextLine().trim();
+
+            System.out.print("Enter The Second Number: ");
+
+            num2 = scanner.nextDouble();
+
+            calculate(num1, num2, operator);
+        }
+    }
+
+    public static void calculate(double num1, double num2, String operator) {
         double result = 0;
-        char operator;
-
-        System.out.println("Result: 0");
-        System.out.print("Enter The First Number:");
-
-        num1 = scanner.nextDouble();
 
 
-        System.out.println("Select Operation By Number: ");
-        System.out.println("1.[ + ]");
-        System.out.println("2.[ - ]");
-        System.out.println("3.[ x ]");
-        System.out.println("4.[ / ]");
-        System.out.println("5.[ ^ ]");
+        boolean isValidOperator = "+ - * / ^ c e".contains(operator);
 
-        operator = scanner.next().charAt(0);
-
-        boolean isValidOperator =
-                operator == '+'
-                || operator == '-'
-                || operator == 'x'
-                || operator == '/'
-                || operator == '^';
-
-        if(!isValidOperator){
+        if (!isValidOperator) {
             System.out.print("In-valid Operator");
+            calcApp();
             return;
         }
 
-        System.out.print("Enter The Second Number: ");
-
-        num2 = scanner.nextInt();
-
-        switch (operator){
-            case '+' -> result = num1 + num2;
-            case '-' -> result = num1 - num2;
-            case 'x' -> result = num1 * num2;
-            case '/' -> {
-                if(num2 == 0){
+        switch (operator) {
+            case "+" -> result = num1 + num2;
+            case "-" -> result = num1 - num2;
+            case "x" -> result = num1 * num2;
+            case "/" -> {
+                if (num2 == 0) {
                     System.out.print("Result Cannot be Divided By 0");
+                    calcApp();
                 }
                 result = num1 / num2;
             }
-            case '^' -> result = Math.pow(num1, num2);
+            case "^" -> result = Math.pow(num1, num2);
         }
+
         System.out.printf("Result: %f", result);
 
         reCalc(result);
-
-        scanner.close();
     }
 
-    public static void reCalc (double result){
-        Scanner scanner = new Scanner(System.in);
+    public static void reCalc(double result) {
 
         double newResult = result;
         double num2;
-        char operator;
+        String operator;
 
         System.out.println("Select Operation:");
-        System.out.println("1.[ + ]");
-        System.out.println("2.[ - ]");
-        System.out.println("3.[ x ]");
-        System.out.println("4.[ / ]");
-        System.out.println("5.[ ^ ]");
-        System.out.println("6.[ c ]");
-        System.out.println("0.[ e = exit]");
+        System.out.println("( + ) , ( - ) , ( * ) , ( / ) , ( ^ )");
+        System.out.println("( c = clear ) , ( e = exit ) ");
 
-        operator = scanner.next().charAt(0);
+        operator = scanner.nextLine().trim();
 
-        boolean isValidOperator =
-                operator == '+'
-                        || operator == '-'
-                        || operator == 'x'
-                        || operator == '/'
-                        || operator == '^'
-                        || operator == 'c'
-                        || operator == 'e' ;
+        boolean isValidOperator = "+ - * / ^ c e".contains(operator);
 
-        if(!isValidOperator){
+        if (!isValidOperator) {
             System.out.print("In-valid Operator");
             return;
         }
 
-        if(operator =='e'){
-            scanner.close();
+        if (operator.equals("e")) {
+            isRunning = false;
             return;
         }
 
-        if(operator == 'c'){
-            calculator();
+        if (operator.equals("c")) {
+            calcApp();
             return;
         }
 
         System.out.print("Enter The Second Number: ");
 
-        num2 = scanner.nextInt();
+        num2 = scanner.nextDouble();
 
-        switch (operator){
-            case '+' -> newResult = result + num2;
-            case '-' -> newResult = result - num2;
-            case 'x' -> newResult = result * num2;
-            case '/' -> {
-                if(num2 == 0){
+        switch (operator) {
+            case "+" -> newResult = result + num2;
+            case "-" -> newResult = result - num2;
+            case "x" -> newResult = result * num2;
+            case "/" -> {
+                if (num2 == 0) {
                     System.out.print("Result Cannot be Divided By 0");
                 }
-                    newResult = result / num2;
+                newResult = result / num2;
             }
-            case '^' -> newResult = Math.pow(result, num2);
+            case "^" -> newResult = Math.pow(result, num2);
         }
+
         System.out.printf("Result: %f", newResult);
-        reCalc(result);
+
+        reCalc(newResult);
 
     }
 }
